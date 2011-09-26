@@ -18,50 +18,21 @@ int Convert2ASCII( char[]);
  * 
  */
 int main(int argc, char** argv) {
-    char fileName[256], fileNameout[256]; /**< name of file to be open */
-     char userFile[256], dir[256];
-     FILE* fins;
-     FILE* fos;
-     long fSize;
-     char* buff;
+     char fileNameout[256]; // Name of the output file
+     FILE* fins;            // Input file Stream
+     FILE* fos;             // Output file Stream
+     long fSize;            // File Size in "bits"
+     char* buff;            // Buffer for the converted file
+     
+     /* The input character as an int, frame counter, character counter, 
+      * sync character counter, total character counter.
+      */
      int inputChar, frameCount, numberChar, syncCount, charCount, totChar;
-     char* charBuffer;
-     char* storage;
-     char binChar[8];
-     size_t result;
+     char* charBuffer;      //Buffer for the character
+     char binChar[8];       //Character as a Binary String
 
-     //while(1){
-    /** Get the file location, file name and character to replace space with */
-/*
-        printf("Enter 'exit' for dir to quit. \n");
-        printf("Enter directory of the file: \n Ex: /home/user/\n");
-        fgets(dir,sizeof(dir), stdin);
-        if(strncmp(dir,"exit",4)==0){
-            break;
-        }
-        printf("Enter filename: \n Ex: myfile.txt\n");
-        fgets(userFile, sizeof(userFile),stdin);
-        if(strncmp(dir,"exit",4)==0){
-            break;
-        }
-        if(dir[strlen(dir)-1]== '\n'){
-            dir[strlen(dir)-1]= '\0';
-        }
-        if(userFile[strlen(userFile)-1]== '\n'){
-            userFile[strlen(userFile)-1]= '\0';
-        }
-*/
-
-        /** Prep the strings for the server thread */
-/*
-        strcpy(fileName,dir);
-        strcat(fileName,userFile);
-        strcpy(fileNameout,dir);
-        strncat(fileNameout,userFile,strlen(userFile)-4);
-        strcat(fileNameout,".pdf");
-*/
         
-        fins = fopen("/home/daniel/NetBeansProjects/Transmitter/output.bin", "rb");
+        fins = fopen("output.bin", "rb");
         if (fins==NULL) {fputs ("File error",stderr); exit (1);}
         
         fseek (fins , 0 , SEEK_END);
@@ -111,25 +82,13 @@ int main(int argc, char** argv) {
             }
         }
 
-        
 
-/*
-        storage = strtok(buff,22);
-        while(storage!=NULL){
-            storage=strtok(NULL,22);
-        }
-*/
-
-        
-        //printf(buff);
         fos = fopen(fileNameout, "wb");
         if (fos==NULL) {fputs ("File error",stderr); exit (1);}
         fwrite(buff,1,totChar-4,fos);
         fclose(fins);
         fclose(fos);
         free(buff);
-    // }
-
 
 
     return (EXIT_SUCCESS);
