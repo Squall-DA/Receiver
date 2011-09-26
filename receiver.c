@@ -31,27 +31,40 @@ int main(int argc, char** argv) {
      char* charBuffer;      //Buffer for the character
      char binChar[8];       //Character as a Binary String
 
-        
+        /* Opens the File for Reading
+         */
         fins = fopen("output.bin", "rb");
         if (fins==NULL) {fputs ("File error",stderr); exit (1);}
         
+        /* Finds the File Size */
         fseek (fins , 0 , SEEK_END);
         fSize = ftell (fins);
         rewind (fins);      
         
+        /*Dyanmically allocate a buffer buff for the file*/
         buff = (char*) malloc (sizeof(char)*fSize/8-4);
         if (buff == NULL) {fputs ("Memory error",stderr); exit (2);}
         
+        /*Initialize the counters*/
         frameCount=0;
         syncCount=0;
         numberChar=0;
         charCount=0;
         totChar=0;
+        
+        /*Name the file output*/
         strncpy(fileNameout,"output",6);
         
+        /*Read in 8 "bits" at a time*/
         while(fgets(binChar,9,fins)!=NULL){
             charBuffer = (char*) malloc (sizeof(char));
             if (charBuffer == NULL) {fputs ("Memory error",stderr); exit (2);}
+            
+            /*
+             * If inputChar is not a sync character and it is the first
+             *frame add it is the extension. Add it to the output file
+             * name
+             */
             inputChar=Convert2ASCII(binChar);
             if(inputChar!=22&&numberChar!=0&&frameCount>0){
                 sprintf(charBuffer,"%c",inputChar);
