@@ -61,9 +61,8 @@ int main(int argc, char** argv) {
             if (charBuffer == NULL) {fputs ("Memory error",stderr); exit (2);}
             
             /*
-             * If inputChar is not a sync character and it is the first
-             *frame add it is the extension. Add it to the output file
-             * name
+             * If inputChar is not a sync character and it is not the first
+             * frame it is part of the file. Add it to the output file buffer.
              */
             inputChar=Convert2ASCII(binChar);
             if(inputChar!=22&&numberChar!=0&&frameCount>0){
@@ -71,17 +70,30 @@ int main(int argc, char** argv) {
                 strncat(buff,charBuffer, 1);
                 charCount++;
             }
+            /*
+             * If inputChar is not a sync character and it is the first
+             * frame it is part of the extension. Add it to the output file name. 
+             */
             if(inputChar!=22&&numberChar!=0&&frameCount==0){
                 sprintf(charBuffer,"%c",inputChar);
                 strncat(fileNameout,charBuffer, 1);
                 charCount++;
             }
+            /*
+             * If there has been one sync character and there is no character
+             * number this must be the number of characters of the frame 
+             */
             if(syncCount==1&&numberChar==0){
                 numberChar=inputChar/8;
             }
+            /*sync character increment syncCount*/
             if(inputChar==22){
                 syncCount++;
             }
+            /*
+             * If there has been two sync characters the frame has ended reset
+             * the comments.
+             */
             if(syncCount==2){
                 if(charCount!=numberChar){
                     fputs ("Number of bits does not match",stderr); exit (3);
@@ -95,7 +107,10 @@ int main(int argc, char** argv) {
             }
         }
 
-
+        /*
+         * Open the output file and write the data to it. Then close the files
+         * and free the buffer. 
+         */
         fos = fopen(fileNameout, "wb");
         if (fos==NULL) {fputs ("File error",stderr); exit (1);}
         fwrite(buff,1,totChar-4,fos);
