@@ -1,0 +1,3 @@
+all:
+	gcc receiver.c -o Receiver
+	gcc transmitter.c -o Transmitter

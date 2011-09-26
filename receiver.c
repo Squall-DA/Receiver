@@ -10,7 +10,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <ctype.h>
-#include <math.h>
+
 
 
 int Convert2ASCII( char[]);
@@ -114,6 +114,10 @@ int main(int argc, char** argv) {
         fos = fopen(fileNameout, "wb");
         if (fos==NULL) {fputs ("File error",stderr); exit (1);}
         fwrite(buff,1,totChar-4,fos);
+        printf("File Received. \nFile is in the same directory as the receiver program. \n"
+               "File is named %s. Press enter to exit.", fileNameout);
+        fgets(buff, 9, stdin);
+        
         fclose(fins);
         fclose(fos);
         free(buff);
@@ -122,12 +126,14 @@ int main(int argc, char** argv) {
     return (EXIT_SUCCESS);
 }
 
+/*
+ * A function to convert a binary string to an ascii character code. 
+ */
 int Convert2ASCII( char str[8]){
     int parity, i, pcount;
     double exponent;
     parity = 0;
     pcount = 0;
-    //ascii = 0;
     
     for(i=0; i<8; i++){
         if(i==0){
