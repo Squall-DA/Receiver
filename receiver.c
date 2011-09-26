@@ -1,6 +1,8 @@
 /* 
  * File:   receiver.c
- * Author: daniel
+ * Author: Daniel Huelsman 
+ * Class: Data Communications 
+ * Project 1
  *
  * Created on September 20, 2011, 2:47 PM
  */
