@@ -140,7 +140,7 @@ int Convert2ASCII( char str[8]){
     for(i=0; i<8; i++){
         if(i==0){
             if(str[i] == '1'){
-                parity = 1;
+                pcount++;
                 str[i]='0';
             }
             
@@ -151,9 +151,99 @@ int Convert2ASCII( char str[8]){
             }
         }
     }
-    if(pcount%2 != parity)  
+    if(pcount%2 != 1)  
         {fputs ("Parity Error",stderr); exit (4);}
     return((int) strtol(str, NULL,2));
     
+   
 }
  
+void HammingDecode (char hstr[13],char crstr[12]){
+    int pOne = 0, pTwo=0, pFour=0, pEight=0;
+    //char hstr[13];
+    int i, pCount=0, errorBit=0, firstBit=0, oddErrors=0;
+    int hstr1 =0, hstr2=0, hstr4=0, hstr8 =0, numErrorb=0;
+    
+    if(hstr[0]=='1'){
+        firstBit=1;
+    }if(hstr[1]=='1'){
+        hstr1=1;
+    }if(hstr[2]=='1'){
+        hstr2=1;
+    }if(hstr[4]=='1'){
+        hstr4=1;
+    }if(hstr[8]=='1'){
+        hstr8=1;
+    }
+    
+    
+    for(i=1; i<13; i++){
+        if(hstr[i]=='1'){
+            pCount++;
+        }
+    }
+    if(pCount%2==firstBit){
+        oddErrors=1;
+    }
+    
+    if (hstr[3]=='1'){
+        pOne++;
+        pTwo++;
+    }if (hstr[5]=='1'){
+        pOne++;
+        pFour++;
+    }if (hstr[6]=='1'){
+        pTwo++;
+        pFour++;
+    }if (hstr[7]=='1'){
+        pOne++;
+        pTwo++;
+        pFour++;
+    }if (hstr[9]=='1'){
+        pOne++;
+        pEight++;
+    }if (hstr[10]=='1'){
+        pTwo++;
+        pEight++;
+    }if (hstr[11]=='1'){
+        pOne++;
+        pTwo++;
+        pEight++;
+    }if (hstr[12]=='1'){
+        pFour++;
+        pEight++;
+    }
+    if(pOne%2==hstr1){
+        errorBit+=1;
+        numErrorb++;
+    }
+    if(pTwo%2==hstr2){
+        errorBit+=2;
+        numErrorb++;
+    }
+    if(pFour%2==hstr4){
+        errorBit+=4;
+        numErrorb++;
+    }
+     if(pEight%2==hstr8){
+        errorBit+=8;
+        numErrorb++;
+    } 
+    
+    if(numErrorb>0 && oddErrors!=1){
+        fputs("Even Number of errors could not Correct!!!",stderr);
+        exit(5);
+    }else if(errorBit>12){
+        fputs("More than 2 errors can not correct!!!!",stderr);
+        exit(6);
+    }else if(numErrorb>0 && oddErrors==1){
+        if(hstr[errorBit]=='1'){
+            hstr[errorBit]='0';
+        }else{
+            hstr[errorBit]='1';
+        }
+            
+    }
+
+    
+}

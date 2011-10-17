@@ -1,7 +1,0 @@
-This is a test of my new 
-transmitter
-and receiver 
-program
-I hope it works
-just like it 
-is supposed to.
